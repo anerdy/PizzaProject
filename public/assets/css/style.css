@@ -9308,7 +9308,7 @@ h1, h2, h3, h4, h5,
     .table tbody tr td.image-prod .img {
       display: block;
       width: 100px;
-      height: 150px;
+      height: 100px;
       margin: 0 auto; }
     .table tbody tr td.product-name {
       width: 30%; }
@@ -10670,4 +10670,17 @@ textarea.form-control {
 .top_pizza_box {
   margin-top: 150px;
   margin-bottom: 120px;
+}
+
+@media (max-width: 992px) {
+  .top_pizza_box {
+    margin-top: 0;
+    margin-bottom: 50px;
+  }
+}
+
+.main_menu {
+  margin-top: 30px;
+  font-size: 30px !important;
+  margin-bottom: 10px;
 }

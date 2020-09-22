@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PizzaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +20,12 @@ Route::get('/', function () {
 });
 */
 
-Route::get('/', 'App\Http\Controllers\FreeController@index')->name('index');
+Route::get('/', [PizzaController::class, 'index'])->name('index');
+Route::get('/cart', [PizzaController::class, 'cart'])->name('cart');
+Route::get('/checkout', [PizzaController::class, 'checkout'])->name('checkout');
+Route::get('/pizza/{pizza_id}', [PizzaController::class, 'pizzaPage'])->where('pizza_id', '[0-9_\-]+')->name('pizzaPage');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia\Inertia::render('Dashboard');
 })->name('dashboard');
 
-Route::get('/about', 'App\Http\Controllers\FreeController@about')->name('about');
