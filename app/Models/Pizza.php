@@ -25,6 +25,7 @@ class Pizza extends Model
     const CURRENCY_USD_SIGN = '$';
     const CURRENCY_EUR_SIGN = '€';
 
+
     protected $fillable = [
         'name',
         'description',

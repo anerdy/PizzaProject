@@ -18,6 +18,10 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+    const CREATE_ACCOUNT = 1;
+    const DONT_CREATE_ACCOUNT = 2;
+    const ISSET_ACCOUNT = 3;
+
     /**
      * The attributes that are mass assignable.
      *

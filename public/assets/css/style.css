@@ -10684,3 +10684,17 @@ textarea.form-control {
   font-size: 30px !important;
   margin-bottom: 10px;
 }
+
+.error_red {
+  color: red;
+}
+
+.order_block {
+  padding: 100px 0;
+}
+
+@media (max-width: 992px) {
+  .order_block {
+    padding: 0;
+  }
+}

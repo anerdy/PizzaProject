@@ -9,14 +9,6 @@ use Inertia\Inertia;
 class PizzaController extends Controller
 {
 
-    /**
-     * PizzaController constructor.
-     */
-    public function __construct()
-    {
-    }
-
-
 
     public function index()
     {
@@ -38,4 +30,8 @@ class PizzaController extends Controller
         return Inertia::render('Checkout');
     }
 
+    public function success(Request $request)
+    {
+        return Inertia::render('Success');
+    }
 }

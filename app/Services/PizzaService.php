@@ -3,51 +3,49 @@
 namespace App\Services;
 
 use App\Models\Pizza;
+use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 use \Exception;
 
 class PizzaService
 {
 
-    public function __construct()
-    {
-    }
-
-
+    /**
+     * @param $request
+     * @return mixed
+     */
     public function getPizzas($request)
     {
-            $pizzas = Pizza::get();
-            if ($pizzas) {
-                $pizzas = $pizzas->toArray();
-                foreach ($pizzas as $id => $pizza) {
-                    if ( isset($request->currency) && $request->currency == Pizza::CURRENCY_EUR ) {
-                        $pizzas[$id]['price'] = number_format((float) $pizzas[$id]['price'] * Pizza::CURRENCY_EUR_RATE, 2, '.', '');
-                        $pizzas[$id]['sign'] = Pizza::CURRENCY_EUR_SIGN;
-                    } else {
-                        $pizzas[$id]['sign'] = Pizza::CURRENCY_USD_SIGN;
-                    }
-                }
-
+        $pizzas = Pizza::get();
+        if ($pizzas) {
+            $pizzas = $pizzas->toArray();
+            foreach ($pizzas as $id => $pizza) {
+                $pizzas[$id] = $this->generateSign($request, $pizzas[$id]);
             }
+        }
 
         return $pizzas;
     }
 
+    /**
+     * @param $request
+     * @return mixed
+     */
     public function getPizza($request)
     {
         $pizza = Pizza::where('id', $request->pizza_id)->first();
         if ($pizza) {
             $pizza = $pizza->toArray();
-            if ( isset($request->currency) && $request->currency == Pizza::CURRENCY_EUR ) {
-                $pizza['price'] = number_format((float) $pizza['price'] * Pizza::CURRENCY_EUR_RATE, 2, '.', '');
-                $pizza['sign'] = Pizza::CURRENCY_EUR_SIGN;
-            } else {
-                $pizza['sign'] = Pizza::CURRENCY_USD_SIGN;
-            }
+            $pizza = $this->generateSign($request, $pizza);
         }
 
         return $pizza;
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     public function getCart($request)
     {
         try {
@@ -60,13 +58,7 @@ class PizzaService
                 $pizzas = $pizzas->toArray();
                 foreach ($pizzas as $id => $pizza) {
                     if ( isset( $carts[$pizza['id']] ) ) {
-
-                        if ( isset($request->currency) && $request->currency == Pizza::CURRENCY_EUR ) {
-                            $pizzas[$id]['price'] = number_format((float) $pizzas[$id]['price'] * Pizza::CURRENCY_EUR_RATE, 2, '.', '');
-                            $pizzas[$id]['sign'] = Pizza::CURRENCY_EUR_SIGN;
-                        } else {
-                            $pizzas[$id]['sign'] = Pizza::CURRENCY_USD_SIGN;
-                        }
+                        $pizzas[$id] = $this->generateSign($request, $pizzas[$id]);
 
                         $sign = $pizzas[$id]['sign'];
                         $pizzas[$id]['quantity'] = $carts[ $pizza['id'] ];
@@ -96,6 +88,60 @@ class PizzaService
                 'error' => 'Some error'
             ];
         }
+    }
+
+    /**
+     * @param $request
+     * @param $pizza
+     * @return mixed
+     */
+    public function generateSign($request, $pizza)
+    {
+        if ( isset($request->currency) && $request->currency == Pizza::CURRENCY_EUR ) {
+            $pizza['price'] = number_format((float) $pizza['price'] * Pizza::CURRENCY_EUR_RATE, 2, '.', '');
+            $pizza['sign'] = Pizza::CURRENCY_EUR_SIGN;
+        } else {
+            $pizza['sign'] = Pizza::CURRENCY_USD_SIGN;
+        }
+        return $pizza;
+    }
+
+    /**
+     * @param $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validateCheckout($data)
+    {
+        $rules = [
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string'],
+            'phone' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'is_create_account' => ['required', 'integer'],
+        ];
+
+        if ($data['is_create_account'] == User::CREATE_ACCOUNT) {
+            $rules = array_merge($rules, [
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => ['required', 'max:250', 'string'],
+            ]);
+        }
+        $validator = Validator::make($data, $rules);
+
+        return $validator;
+    }
+
+
+    /**
+     * @param $request
+     * @return mixed
+     */
+    public function getPizzasForCheckout($request)
+    {
+        $carts = $request->carts;
+        $pizzas_ids = array_keys($carts);
+        return Pizza::whereIn('id', $pizzas_ids)->get();
     }
 
 

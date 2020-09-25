@@ -9,9 +9,15 @@
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active"><inertia-link href="/" class="nav-link" >Home</inertia-link></li>
-                    <li class="nav-item active"><a href="/login" class="nav-link" >Login</a></li>
-                    <li class="nav-item active"><a href="/register" class="nav-link" >Register</a></li>
+                    <li class="nav-item active" v-if="$page.user" ><inertia-link href="/dashboard" class="nav-link" >Orders</inertia-link></li>
+                    <li class="nav-item active" v-if="!$page.user" ><a href="/login" class="nav-link" >Login</a></li>
+                    <li class="nav-item active" v-if="!$page.user" ><a href="/register" class="nav-link" >Register</a></li>
                     <li class="nav-item active"><inertia-link href="/cart" class="nav-link" ><span class="icon-shopping_cart"></span>[{{cart_items_count}}]</inertia-link></li>
+                    <li class="nav-item active" v-if="$page.user" >
+                        <inertia-link href="#" @click.prevent="logout" class="nav-link">
+                            Logout
+                        </inertia-link >
+                    </li>
                 </ul>
             </div>
         </div>
@@ -28,6 +34,13 @@
         },
         props: [
             'cart_items_count'
-        ]
+        ],
+        methods: {
+            logout() {
+                axios.post('/logout').then(response => {
+                    window.location = '/';
+                })
+            },
+        }
     }
 </script>
