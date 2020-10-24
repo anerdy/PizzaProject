@@ -27,8 +27,3 @@ Route::get('/get_cart', [PizzaController::class, 'getCart'])->name('get_cart');
 Route::post('/checkout', [PizzaController::class, 'postCheckout'])->name('post_checkout');
 
 Route::middleware('auth:sanctum')->get('/get_user_orders', [OrderController::class, 'getUserOrders'])->name('get_user_orders');
-// Route::get('/get_user_orders', [OrderController::class, 'getUserOrders'])->name('get_user_orders');
-
-//Route::group(['middleware' => ['auth', 'verified']], function () {
-// Route::get('/get_user_orders', [OrderController::class, 'getUserOrders'])->name('get_user_orders');
-//});

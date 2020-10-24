@@ -22,4 +22,3 @@ Route::get('/pizza/{pizza_id}', [PizzaController::class, 'pizzaPage'])->where('p
 Route::get('/success', [PizzaController::class, 'success'])->name('success');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard',  [OrderController::class, 'dashboard'])->name('dashboard');
-

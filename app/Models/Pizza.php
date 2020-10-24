@@ -21,7 +21,7 @@ class Pizza extends Model
     const DISCOUNT_PRICE = 0.00;
 
     const CURRENCY_EUR = 'EUR';
-    const CURRENCY_EUR_RATE = 1.5;
+    const CURRENCY_EUR_RATE = 0.84;
     const CURRENCY_USD_SIGN = '$';
     const CURRENCY_EUR_SIGN = '€';
 

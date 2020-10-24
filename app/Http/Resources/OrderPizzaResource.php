@@ -17,7 +17,7 @@ class OrderPizzaResource extends JsonResource
     {
         if ( isset($request->currency) && $request->currency == Pizza::CURRENCY_EUR ) {
             if ($this->pivot) {
-                $price = number_format((float) $this->pivot->count * Pizza::CURRENCY_EUR_RATE, 2, '.', '');
+                $price = number_format((float) $this->pivot->price * Pizza::CURRENCY_EUR_RATE, 2, '.', '');
             } else {
                 $price = number_format((float) $this->price * Pizza::CURRENCY_EUR_RATE, 2, '.', '');
             }

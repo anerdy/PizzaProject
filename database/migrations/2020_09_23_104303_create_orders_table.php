@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->unsigned()->index()->nullable();
+            $table->bigInteger('user_id')->unsigned()->index()->nullable();
             $table->string('firstname')->index();
             $table->string('lastname')->index();
             $table->text('address');
@@ -26,11 +26,9 @@ class CreateOrdersTable extends Migration
             $table->decimal('discount',12,2)->index();
             $table->decimal('total',12,2)->index();
             $table->timestamps();
-        });
-
-        Schema::table('orders', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
         });
+
     }
 
     /**

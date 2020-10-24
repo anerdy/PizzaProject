@@ -14,13 +14,10 @@ class CreateOrderPizzaTable extends Migration
     public function up()
     {
         Schema::create('order_pizza', function (Blueprint $table) {
-            $table->integer('order_id')->unsigned()->index();
-            $table->integer('pizza_id')->unsigned()->index();
+            $table->bigInteger('order_id')->unsigned()->index();
+            $table->bigInteger('pizza_id')->unsigned()->index();
             $table->decimal('price',12,2)->index();
             $table->integer('count')->index();
-        });
-
-        Schema::table('order_pizza', function (Blueprint $table) {
             $table->foreign('order_id')->references('id')->on('orders');
             $table->foreign('pizza_id')->references('id')->on('pizzas');
         });
